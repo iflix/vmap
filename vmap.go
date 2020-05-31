@@ -1,10 +1,15 @@
 // Package vmap implement IAB's VMAP 1.0.1 (http://www.iab.net/guidelines/508676/digitalvideo/vsuite/vmap)
 package vmap
 
-import "github.com/rs/vast"
+import (
+	"encoding/xml"
+	"github.com/rs/vast"
+)
 
 // VMAP is the root <VMAP> tag
 type VMAP struct {
+	XMLName xml.Name `xml:"vmap:VMAP"`
+	XMLNS   string   `xml:"xmlns:vmap,attr"`
 	// The version of the VMAP spec (should be 1.0)
 	Version string `xml:"version,attr"`
 	// Zero or more <AdBreak> child elements
@@ -15,6 +20,7 @@ type VMAP struct {
 
 // AdBreak represents a single ad break, but may allow for multiple ads.
 type AdBreak struct {
+	XMLName xml.Name `xml:"vmap:AdBreak"`
 	// Represents the timing of the ad break. Values of this attribute can be represented
 	// in one of the four ways:
 	//
@@ -63,13 +69,14 @@ type AdBreak struct {
 	// Provides the player with either an inline ad response or a reference to an ad response.
 	AdSource *AdSource `xml:",omitempty"`
 	// Defines event tracking URLs
-	TrackingEvents []Tracking `xml:"TrackingEvents>Tracking,omitempty"`
+	TrackingEvents []Tracking `xml:"vmap:TrackingEvents>Tracking,omitempty"`
 	// Can be used to express additional information not supported in the VMAP specification.
 	Extensions *Extensions `xml:",omitempty"`
 }
 
 // AdSource provides the player with either an inline ad response or reference to an ad response.
 type AdSource struct {
+	XMLName xml.Name `xml:"vmap:AdSource"`
 	// Ad identifier for the ad source
 	ID string `xml:"id,attr,omitempty"`
 	// Indicates whether a VAST ad pod or multple buffet of ads can be served into an ad break.
@@ -80,13 +87,14 @@ type AdSource struct {
 	// not specified, the video player may choose whether it will honor redirects.
 	FollowRedirects *bool `xml:"followRedirects,attr,omitempty"`
 	// Contains an embedded VAST response.
-	VASTAdData   *vast.VAST `xml:"VASTAdData>VAST,omitempty"`
+	VASTAdData   *vast.VAST `xml:"vmap:VASTAdData>VAST,omitempty"`
 	AdTagURI     *AdTagURI
 	CustomAdData *CustomAdData
 }
 
 // AdTagURI references an ad response from another system.
 type AdTagURI struct {
+	XMLName xml.Name `xml:"vmap:AdTagURI"`
 	// Can be vast, vast1, vast2, vast3 or any string identifying a proprietary template.
 	TemplateType string `xml:"templateType,attr,omitempty"`
 	URI          string `xml:",cdata"`
@@ -94,6 +102,7 @@ type AdTagURI struct {
 
 // CustomAdData is an arbitrary string data that represents a non-VAST ad response
 type CustomAdData struct {
+	XMLName xml.Name `xml:"vmap:CustomAdData"`
 	// Can be vast, vast1, vast2, vast3 or any string identifying a proprietary template.
 	TemplateType string `xml:"templateType,attr,omitempty"`
 	Data         string `xml:",chardata"`
@@ -101,6 +110,7 @@ type CustomAdData struct {
 
 // Tracking defines an event tracking URL
 type Tracking struct {
+	XMLName xml.Name `xml:"vmap:Tracking"`
 	// The name of the event to track for the element. Can be one of breakStart, breakEnd or error.
 	Event string `xml:"event,attr"`
 	URI   string `xml:",chardata"`
@@ -108,11 +118,13 @@ type Tracking struct {
 
 // Extensions defines extensions
 type Extensions struct {
+	XMLName    xml.Name    `xml:"vmap:Extensions"`
 	Extensions []Extension `xml:"Extension,omitempty"`
 }
 
 // Extension represent aribtrary XML provided by the platform to extend the VAST response
 type Extension struct {
+	XMLName xml.Name `xml:"vmap:Extension"`
 	// The type of the extension. The type must be globaly unique. A URI is recommended.
 	Type string `xml:"type,attr,omitempty"`
 	// The XML content of the extension. Extension XML must use it's own namespace.
