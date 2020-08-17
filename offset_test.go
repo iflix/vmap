@@ -3,7 +3,7 @@ package vmap
 import (
 	"testing"
 
-	"github.com/rs/vast"
+	"github.com/iflix/vast"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -3,7 +3,7 @@ package vmap
 
 import (
 	"encoding/xml"
-	"github.com/rs/vast"
+	"github.com/iflix/vast"
 )
 
 // VMAP is the root <VMAP> tag

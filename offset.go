@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rs/vast"
+	"github.com/iflix/vast"
 )
 
 // Offset represents either a vast.Duration or a percentage of the video duration.
